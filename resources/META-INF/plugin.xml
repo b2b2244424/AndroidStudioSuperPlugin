@@ -1,0 +1,195 @@
+<idea-plugin version="2">
+  <id>com.idea.android.superplugins.plugins</id>
+  <name>AndroidStudioSuperPlugin</name>
+  <version>1.0.0</version>
+  <vendor email="daniel@espendiller.net" url="http://espend.de">espend</vendor>
+
+  <description><![CDATA[
+    <h1>AndroidStudioSuperPlugin</h1>
+    <br/>
+    <a href="https://github.com/Haehnchen/idea-android-studio-plugin/issues">Issues</a>
+    <br/>
+
+<h2>Features</h2>
+
+<ul>
+    <li>Android Studio Prettify</li><a href="https://github.com/Haehnchen/idea-android-studio-plugin">idea-android-studio-plugin</a>
+    <li>GsonFormat</li><a href="https://github.com/zzz40500/GsonFormat">GsonFormat</a>
+    <li>Android Code Generator</li><a href="https://github.com/tmorcinek/android-codegenerator-plugin-intellij">Android Code Generator</a>
+    <li>SelectorChapek</li><a href="https://github.com/inmite/android-selector-chapek">SelectorChapek</a>
+    <li>IntelliJ/Android Studio Plugin for Android Parcelable boilerplate code generation</li><a href="https://github.com/mcharmas/android-parcelable-intellij-plugin">Android Parcelable Generator</a>
+    <li>folding-plugin</li><a href="https://github.com/dmytrodanylyk/folding-plugin">folding-plugin</a>
+    <li>Lifecycle-Sorter</li><a href="https://github.com/armandAkop/Lifecycle-Sorter">Lifecycle-Sorter</a>
+</ul>
+
+    ]]>
+  </description>
+
+  <change-notes>
+      <![CDATA[
+
+<h2>1.0.0</h2>
+<ul>
+    <li>Add "Android Studio Prettify"</li>
+    <li>Add "GsonFormat"</li>
+    <li>Add "Android Code Generator"</li>
+    <li>Add "SelectorChapek"</li>
+    <li>Add "Android Parcelable Generator"</li>
+    <li>Add "folding-plugin"</li>
+</ul>
+
+      ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+        <!-- android studio prettify -->
+      <annotator language="JAVA" implementationClass="de.espend.idea.android.annotator.InflateViewAnnotator"/>
+      <annotator language="JAVA" implementationClass="de.espend.idea.android.annotator.InflateCastAnnotator"/>
+
+      <codeInsight.lineMarkerProvider language="JAVA" implementationClass="de.espend.idea.android.linemarker.FragmentRelatedFileLineMarker"/>
+      <codeInsight.lineMarkerProvider language="JAVA" implementationClass="de.espend.idea.android.linemarker.ViewInflateLineMarker"/>
+      <codeInsight.lineMarkerProvider language="JAVA" implementationClass="de.espend.idea.android.linemarker.InflateLayoutLineMarkerProvider"/>
+
+      <gotoSymbolContributor implementation="de.espend.idea.android.symbol.AndroidSymbolContributor"/>
+
+        <!-- android code generator -->
+      <projectService serviceInterface="com.morcinek.android.codegenerator.plugin.persistence.Settings"
+                      serviceImplementation="com.morcinek.android.codegenerator.plugin.persistence.Settings"/>
+      <applicationService
+              serviceInterface="com.morcinek.android.codegenerator.plugin.preferences.persistence.TemplateSettings"
+              serviceImplementation="com.morcinek.android.codegenerator.plugin.preferences.persistence.TemplateSettings"/>
+      <applicationConfigurable
+              instance="com.morcinek.android.codegenerator.plugin.preferences.configurables.MainConfigurable"/>
+
+
+      <!-- folding plugin -->
+      <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
+      <applicationConfigurable instance="com.dd.SettingConfigurable"/>
+      <treeStructureProvider implementation="com.dd.ProjectStructureProvider"/>
+
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <depends>org.jetbrains.android</depends>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+        <!-- Android Studio Prettify Components-->
+      <action id="Android.Pretty.View.Inflate.Variables00" class="de.espend.idea.android.action.generator.LocalViewAction" text="View Variables">
+          <add-to-group group-id="GenerateGroup" anchor="last" />
+      </action>
+      <action id="Android.Pretty.View.Inflate.Fields00" class="de.espend.idea.android.action.generator.FieldViewInflateViewAction" text="View Fields">
+          <add-to-group group-id="GenerateGroup" anchor="last" />
+      </action>
+
+      <action id="Android.Pretty.View.Activity.Variables00" class="de.espend.idea.android.action.generator.ActivityViewMethodVariable" text="View Variables">
+          <add-to-group group-id="GenerateGroup" anchor="last" />
+      </action>
+      <action id="Android.Pretty.View.Activity.Field00" class="de.espend.idea.android.action.generator.ActivityViewFieldVariable" text="View Fields">
+          <add-to-group group-id="GenerateGroup" anchor="last" />
+      </action>
+
+      <action id="Espend.Android.Menu00" class="de.espend.idea.android.action.ExtractStringAction">
+          <add-to-group group-id="EditorPopupMenu"/>
+      </action>
+
+      <!-- Gson support components -->
+      <action id="MainAction00" class="MainAction" text="GsonFormat">
+          <add-to-group group-id="GenerateGroup" anchor="first"/>
+      </action>
+
+
+      <!-- android code generator -->
+      <group>
+          <separator/>
+          <group id="CodeGenerationPlugin.GenerateAndroidCodeGroup00" text="Generate Android Code"
+                 class="com.morcinek.android.codegenerator.plugin.groups.GenerateAndroidCodeGroup" popup="true">
+              <action id="CodeGenerationPlugin.ActivityAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.ActivityAction"
+                      text="Activity" description="Generate Activity Code">
+              </action>
+              <action id="CodeGenerationPlugin.AdapterAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.AdapterAction"
+                      text="Adapter" description="Generate Adapter Code">
+              </action>
+              <action id="CodeGenerationPlugin.FragmentAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.FragmentAction"
+                      text="Fragment" description="Generate Fragment Code">
+              </action>
+              <action id="CodeGenerationPlugin.MenuAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.MenuAction"
+                      text="Menu" description="Generate Menu Code">
+              </action>
+              <separator/>
+              <action id="CodeGenerationPlugin.BActivityAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.butterknife.BActivityAction"
+                      text="Butterknife Activity" description="Generate Butterknife Activity Code">
+              </action>
+              <action id="CodeGenerationPlugin.BAdapterAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.butterknife.BAdapterAction"
+                      text="Butterknife Adapter" description="Generate Butterknife Adapter Code">
+              </action>
+              <action id="CodeGenerationPlugin.BFragmentAction00"
+                      class="com.morcinek.android.codegenerator.plugin.actions.butterknife.BFragmentAction"
+                      text="Butterknife Fragment" description="Generate Butterknife Fragment Code">
+              </action>
+          </group>
+          <separator/>
+          <add-to-group group-id="ProjectViewPopupMenu" anchor="after"
+                        relative-to-action="XmlGenerateToolsGroup"/>
+          <add-to-group group-id="EditorPopupMenu" anchor="after"
+                        relative-to-action="XmlGenerateToolsGroup"/>
+      </group>
+
+        <!-- android SelectorChapek -->
+      <action id="android-selector-chapek00" class="SelectorChapekAction" text="Generate Android Selectors"
+              description="Automatically generates drawable selectors from appropriately named resources">
+          <add-to-group group-id="ProjectViewPopupMenu" anchor="after"
+                        relative-to-action="ProjectViewPopupMenuRefactoringGroup"/>
+      </action>
+
+        <!-- IntelliJ/Android Studio Plugin for Android Parcelable boilerplate code generation -->
+      <action id="generateParcelableNew00" class="pl.charmas.parcelablegenerator.ParcelableAction"
+              text="Parcelable"
+              description="Generates Android Parcelable based on class fields">
+          <add-to-group group-id="GenerateGroup" anchor="last"/>
+      </action>
+
+      <!-- folding plugin -->
+      <action id="ComposeAction00" class="com.dd.ComposeAction">
+          <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+      </action>
+
+        <!-- Lifecycle-Sorter -->
+      <group id="sorter00" text="Sort Lifecycle Methods" popup="true" description="Sorts the lifecycle methods of an activity">
+
+          <action class="Action.SortStartAction" id="sortStart00" text="Place at Start of Class" description="Places the sorted methods at the start of the class">
+              <keyboard-shortcut first-keystroke="control alt K" keymap="$default"/>
+          </action>
+
+          <action class="Action.SortEndAction" id="sortEnd00" text="Place at End of Class" description="Places the sorted methods at the end of the class">
+              <keyboard-shortcut first-keystroke="shift control alt K" keymap="$default"/>
+          </action>
+
+          <add-to-group group-id="CodeMenu" anchor="last"/>
+
+      </group>
+
+  </actions>
+
+</idea-plugin>
